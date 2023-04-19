@@ -19,14 +19,16 @@ const HeroesAddForm = () => {
     const {request} = useHttp();
 
     const addHeroes = (values) => {
-        const body = JSON.stringify(values); // преобразуем объект с данными в JSON-строку
+        const id = {id: uuidv4()}
+        const obj = {...id, ...values}
+        console.log(obj)
+        const body = JSON.stringify(obj); // преобразуем объект с данными в JSON-строку
         request("http://localhost:3001/heroes", "POST", body)
             .then(dispatch(addItem(values)))
     };
 
     const formik = useFormik({
         initialValues: {
-            id: uuidv4(),
             name: "",
             description: "",
             element: ""
