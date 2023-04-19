@@ -24,7 +24,7 @@ const HeroesAddForm = () => {
         console.log(obj)
         const body = JSON.stringify(obj); // преобразуем объект с данными в JSON-строку
         request("http://localhost:3001/heroes", "POST", body)
-            .then(dispatch(addItem(values)))
+        dispatch(addItem(obj))
     };
 
     const formik = useFormik({
