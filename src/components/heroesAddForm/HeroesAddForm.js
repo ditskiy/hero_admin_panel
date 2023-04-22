@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector  } from 'react-redux';
 import { addItem } from '../../actions';
 import {useHttp} from '../../hooks/http.hook';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 const HeroesAddForm = () => {
     const dispatch = useDispatch();
     const {request} = useHttp();
+    const {filters, filtersLoadingStatus} = useSelector(state => state.filters);
 
     const addHeroes = (values) => {
         const id = {id: uuidv4()}
@@ -35,6 +36,24 @@ const HeroesAddForm = () => {
         },
         onSubmit: values => addHeroes(values)
     })
+    const renderFilters = (filters, status) => {
+        if (status === "loading") {
+            return <option>Загрузка элементов</option>
+        } else if (status === "error") {
+            return <option>Ошибка загрузки</option>
+        }
+        
+        // Если фильтры есть, то рендерим их
+        if (filters && filters.length > 0 ) {
+            return filters.map(({name, label}) => {
+                // Один из фильтров нам тут не нужен
+                // eslint-disable-next-line
+                if (name === 'all')  return;
+
+                return <option key={name} value={name}>{label}</option>
+            })
+        }
+    }
 
     return (
             <form className="border p-4 shadow-lg rounded" onSubmit={formik.handleSubmit}>
@@ -74,10 +93,11 @@ const HeroesAddForm = () => {
                         value={formik.values.element}
                         onChange={formik.handleChange}>
                         <option value="">Я владею элементом...</option>
-                        <option value="fire">Огонь</option>
+                        {renderFilters(filters, filtersLoadingStatus)}
+                        {/* <option value="fire">Огонь</option>
                         <option value="water">Вода</option>
                         <option value="wind">Ветер</option>
-                        <option value="earth">Земля</option>
+                        <option value="earth">Земля</option> */}
                     </select>
                 </div>
 
