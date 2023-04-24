@@ -1,8 +1,9 @@
 import { useFormik } from 'formik';
 import { useDispatch, useSelector  } from 'react-redux';
-import { addItem } from '../../actions';
+import { addItem } from '../heroesList/heroesSlice';
 import {useHttp} from '../../hooks/http.hook';
 import { v4 as uuidv4 } from 'uuid';
+
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
 // в общее состояние и отображаться в списке + фильтроваться
@@ -13,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid';
 // Элементы <option></option> желательно сформировать на базе
 // данных из фильтров
 
-// console.log(JSON.stringify(values, null, 2)
 const HeroesAddForm = () => {
     const dispatch = useDispatch();
     const {request} = useHttp();
@@ -94,10 +94,6 @@ const HeroesAddForm = () => {
                         onChange={formik.handleChange}>
                         <option value="">Я владею элементом...</option>
                         {renderFilters(filters, filtersLoadingStatus)}
-                        {/* <option value="fire">Огонь</option>
-                        <option value="water">Вода</option>
-                        <option value="wind">Ветер</option>
-                        <option value="earth">Земля</option> */}
                     </select>
                 </div>
 
